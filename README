@@ -1,0 +1,9 @@
+#使用OpenGL ES2.0绘制图片（PVR & PNG & JPG）
+##Loading and Displaying PVR & PNG & JPG Image
+###此工程为使用 OpenGL ES 2.0绘制PVR图片的demo,TestOpenGLPVR（支持POT的同时也支持NPOT，当然，也支持PNG和JPG）
+
+
+###苹果提供了使用 OpenGL ES 1.0绘制PVR图片的demo，PVRTextureLoader（只支持PVRTC2 & PVRTC4）
+链接为：https://developer.apple.com/library/content/samplecode/PVRTextureLoader/Introduction/Intro.html
+
+This application illustrates how to load PVR texture files using the included PVRTexture class and then display them using OpenGL.
