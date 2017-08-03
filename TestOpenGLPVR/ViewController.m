@@ -9,8 +9,8 @@
 #define SCREEN_WIDTH    ([[UIScreen mainScreen] bounds].size.width)
 #define SCREEN_HEIGHT   ([[UIScreen mainScreen] bounds].size.height)
 
-#define IMG_WIDTH 200
-#define IMG_HEIGHT 200
+#define IMG_WIDTH 300
+#define IMG_HEIGHT 300
 
 #import "ViewController.h"
 
@@ -50,7 +50,6 @@
                                  GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_framebufferWidth);
     glGetRenderbufferParameteriv(
                                  GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_framebufferHeight);
-    
     //check success
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
@@ -101,23 +100,38 @@
     float right =IMG_WIDTH/SCREEN_WIDTH;
     float top = IMG_HEIGHT/SCREEN_HEIGHT;
     
-    //根据屏幕宽高，以及设定需要显示的图片宽高（即：IMG_WIDTH，IMG_HEIGHT)，自动算出居中的vertices
+    //set up vertices,根据屏幕宽高，以及设定需要显示的图片宽高（即：IMG_WIDTH，IMG_HEIGHT)，自动算出居中的vertices
     GLfloat vertices[] =
     {
-        -right, -top,
-        -right, top,
-        right, top,
-        right, -top
+        -right, -top,//左下
+        -right, top,//左上
+        right, top,//右上
+        right, -top//右下
     };
     
     //set up colors
     GLfloat texCoords[] =
     {
-        0.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        1.0f, 1.0f
+        0.0f, 1.0f,//左上
+        0.0f, 0.0f,//左下
+        1.0f, 0.0f,//右下
+        1.0f, 1.0f//右上
     };
+    
+    /*
+     可以看出，vertices和texCoords的坐标是上下翻转的（绕x轴翻转），以为如果不设置GLKTextureLoaderOriginBottomLeft为YES的话，纹理坐标系是反的。
+     如果这段代码这么设置，就不需要设置成翻转的坐标，但会报GLKTextureLoaderErrorReorientationFailure错误，至于错误原因，我还没有找到，如果知道解决方法，辛苦告诉我下哈
+     
+     NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:@(1), GLKTextureLoaderOriginBottomLeft, nil];
+     NSError *error = nil;
+     self.textureInfo = [GLKTextureLoader textureWithContentsOfFile:imageFile
+     options:options
+     error:&error];
+     if (error)
+     {
+        NSLog(@"ERROR: loading texture: %@", [error localizedDescription]);
+     }
+     */
     
     //draw triangle
     glEnableVertexAttribArray(GLKVertexAttribPosition);
